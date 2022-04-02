@@ -3,6 +3,7 @@
   import Overlay from 'src/components/Overlay.svelte';
   import type { Transaction } from 'src/interfaces';
   import { store } from 'src/store';
+  import Input from '../Input.svelte';
   import Loader from '../Loader.svelte';
 
   type SaveHandler = (transaction: Transaction) => void;
@@ -50,39 +51,18 @@
       </button>
     </div>
     <form class="px-4 pt-2 pb-4 z-10" on:submit|preventDefault={save}>
-      <div>
-        <label for="title" class="block text-sm font-medium text-gray-700 mb-1 ml-1">Title</label>
-        <input
-          bind:value={title}
-          type="text"
-          id="title"
-          class="w-full border-2 rounded-lg p-2"
-          placeholder="Bought a thing"
-          tabindex="0"
-        />
-      </div>
-      <div class="mt-4">
-        <label for="amount" class="block text-sm font-medium text-gray-700 mb-1 ml-1">Amount</label>
-        <input
-          bind:value={amount}
-          type="number"
-          id="amount"
-          class="w-full border-2 rounded-lg p-2"
-          placeholder="100"
-        />
-      </div>
-      <div class="mt-4">
-        <label for="notes" class="block text-sm font-medium text-gray-700 mb-1 ml-1">Notes</label>
-        <textarea
-          bind:value={notes}
-          type="text"
-          id="notes"
-          class="w-full block border-2 rounded-lg overflow-y-auto p-2"
-          placeholder="The thing I bought is for another thing."
-          maxlength="500"
-          rows="5"
-        />
-      </div>
+      <Input bind:value={title} label="Title" type="text" placeholder="Bought a thing" />
+      <Input bind:value={amount} class="mt-4" label="Amount" type="number" placeholder="100" />
+      <Input
+        bind:value={notes}
+        class="mt-4"
+        label="Notes"
+        type="number"
+        placeholder="The thing I bought is for another thing."
+        textarea
+        maxlength="500"
+        rows="5"
+      />
       <div class="text-center">
         <Button class="mt-5" width="8rem" rounded disabled={loading}>
           {#if loading}
