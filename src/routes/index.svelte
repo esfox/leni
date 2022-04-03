@@ -1,13 +1,14 @@
 <script lang="ts">
+  import { auth } from '$lib/authenticated-page';
   import { store } from '$lib/store';
-  import Authenticated from 'src/components/Authenticated.svelte';
   import Button from 'src/components/Button.svelte';
   import AddTransaction from 'src/components/Index/AddTransaction.svelte';
   import TransactionList from 'src/components/Index/TransactionList.svelte';
   import Loader from 'src/components/Loader.svelte';
   import Nav from 'src/components/Nav.svelte';
   import { formatCurrency } from 'src/helpers/common';
-  import { onMount } from 'svelte';
+
+  let isLoggedIn = auth();
 
   let loading = true;
   let showingAddTransaction = false;
@@ -15,7 +16,8 @@
   $: balanceString = formatCurrency($store.balance);
 
   const show = () => (showingAddTransaction = true);
-  onMount(async () => {
+  isLoggedIn.subscribe(async (isLoggedIn) => {
+    if (!isLoggedIn) return;
     loading = true;
     try {
       await Promise.all([store.fetchBalance(), store.fetchTransactions()]);
@@ -26,7 +28,7 @@
   });
 </script>
 
-<Authenticated>
+{#if $isLoggedIn}
   <Nav />
   <main class="max-w-[50rem] mx-auto">
     {#if loading}
@@ -49,4 +51,4 @@
       <AddTransaction bind:shown={showingAddTransaction} />
     {/if}
   </main>
-</Authenticated>
+{/if}

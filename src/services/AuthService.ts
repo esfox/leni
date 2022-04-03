@@ -1,3 +1,4 @@
+import { goto } from '$app/navigation';
 import { createClient } from '@supabase/supabase-js';
 
 const supabase = createClient(
@@ -7,9 +8,19 @@ const supabase = createClient(
 
 export class AuthService
 {
-  static isLoggedIn()
+  static getUser()
   {
-    return supabase.auth.session();
+    const user = supabase.auth.user();
+    if(!user)
+      goto('/login');
+
+    return user;
+  }
+
+  static getAccessToken()
+  {
+    const session = supabase.auth.session();
+    return session?.access_token;
   }
 
   static async login(email: string, password: string)
