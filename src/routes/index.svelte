@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Authenticated from 'src/components/Authenticated.svelte';
   import Button from 'src/components/Button.svelte';
   import AddTransaction from 'src/components/Index/AddTransaction.svelte';
   import TransactionList from 'src/components/Index/TransactionList.svelte';
@@ -25,25 +26,27 @@
   });
 </script>
 
-<Nav />
-<main class="max-w-[50rem] mx-auto">
-  {#if loading}
-    <Loader class="mt-12 mx-auto" />
-  {:else}
-    <div class="text-center px-6 py-8">
-      <small>Balance</small>
-      <h1 class="text-4xl font-bold">{balanceString}</h1>
-    </div>
+<Authenticated>
+  <Nav />
+  <main class="max-w-[50rem] mx-auto">
+    {#if loading}
+      <Loader class="mt-12 mx-auto" />
+    {:else}
+      <div class="text-center px-6 py-8">
+        <small>Balance</small>
+        <h1 class="text-4xl font-bold">{balanceString}</h1>
+      </div>
 
-    <TransactionList />
+      <TransactionList />
 
-    <div class="sticky bottom-8 left-0 w-full my-8">
-      <Button class="flex items-center rounded-full mx-auto" on:click={show}>
-        <span class="text-4xl mr-2.5">+</span>
-        <span class="text-lg">Add Transaction</span>
-      </Button>
-    </div>
+      <div class="sticky bottom-8 left-0 w-full my-8">
+        <Button class="flex items-center rounded-full mx-auto" on:click={show}>
+          <span class="text-4xl mr-2.5">+</span>
+          <span class="text-lg">Add Transaction</span>
+        </Button>
+      </div>
 
-    <AddTransaction bind:shown={showingAddTransaction} />
-  {/if}
-</main>
+      <AddTransaction bind:shown={showingAddTransaction} />
+    {/if}
+  </main>
+</Authenticated>
