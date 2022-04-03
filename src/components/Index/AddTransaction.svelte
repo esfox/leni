@@ -12,7 +12,7 @@
   export let onSave: SaveHandler = () => {};
 
   let title: string;
-  let amount: number;
+  let amount: number | undefined;
   let notes: string;
 
   let loading: boolean;
@@ -29,6 +29,9 @@
       });
 
       shown = false;
+      title = '';
+      amount = undefined;
+      notes = '';
       onSave(transaction);
     } catch (error) {
       console.error(error);
@@ -52,7 +55,14 @@
     </div>
     <form class="px-4 pt-2 pb-4 z-10" on:submit|preventDefault={save}>
       <Input bind:value={title} label="Title" type="text" placeholder="Bought a thing" />
-      <Input bind:value={amount} class="mt-4" label="Amount" type="number" placeholder="100" />
+      <Input
+        bind:value={amount}
+        class="mt-4"
+        label="Amount"
+        type="number"
+        placeholder="100"
+        step="any"
+      />
       <Input
         bind:value={notes}
         class="mt-4"
