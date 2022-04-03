@@ -5,9 +5,16 @@ import { DatabaseService } from 'src/services/DatabaseService';
 
 export class TransactionService
 {
-  static async list(page = 1, limit = TRANSACTION_LIST_LIMIT)
+  static whereUserId(userId: string)
   {
-    const records = await DatabaseService.transactions()
+    return DatabaseService.transactions()
+      .where({ [TransactionsFields.userId]: userId });
+  }
+
+  static async list(userId: string, page = 1, limit = TRANSACTION_LIST_LIMIT)
+  {
+    const records = await TransactionService
+      .whereUserId(userId)
       .offset(page - 1)
       .limit(limit)
       .orderBy(TransactionsFields.date, 'desc');
@@ -15,10 +22,14 @@ export class TransactionService
     return records;
   }
 
-  static async create(transaction: NewTransaction)
+  static async create(userId: string, transaction: NewTransaction)
   {
-    const [record] = await DatabaseService.transactions()
-      .insert(transaction)
+    const [record] = await TransactionService
+      .whereUserId(userId)
+      .insert({
+        userId,
+        ...transaction,
+      })
       .returning('*');
 
     return record;

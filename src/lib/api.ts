@@ -1,9 +1,21 @@
 import type { NewTransaction, Transaction } from '$lib/interfaces';
 import ky from 'ky';
 import { TRANSACTION_LIST_LIMIT } from 'src/constants/common';
+import { AuthService } from 'src/services/AuthService';
 
-const api = ky.create({ prefixUrl: '/api' });
-const transactions = ky.create({ prefixUrl: '/api/transactions' });
+const api = ky.create({
+  prefixUrl: '/api',
+  hooks: {
+    beforeRequest: [
+      (request) =>
+      {
+        const accessToken = AuthService.getAccessToken();
+        if(accessToken)
+          request.headers.set('authorization', accessToken);
+      },
+    ],
+  }
+});
 
 export class API
 {
@@ -14,7 +26,7 @@ export class API
 
   static getTransactions(page = 1, limit = TRANSACTION_LIST_LIMIT): Promise<Transaction[]>
   {
-    return transactions.get('', {
+    return api.get('transactions', {
       searchParams: {
         page,
         limit,
@@ -24,7 +36,7 @@ export class API
 
   static addTransaction(transaction: NewTransaction): Promise<Transaction>
   {
-    return transactions.post('create', {
+    return api.post('transactions/create', {
       json: transaction
     }).json();
   }
