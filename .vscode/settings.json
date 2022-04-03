@@ -6,5 +6,9 @@
     "editor.codeActionsOnSave": {
       "source.organizeImports": true
     }
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/.svelte-kit": true
   }
 }

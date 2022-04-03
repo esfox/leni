@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { store } from '$lib/store';
   import Authenticated from 'src/components/Authenticated.svelte';
   import Button from 'src/components/Button.svelte';
   import AddTransaction from 'src/components/Index/AddTransaction.svelte';
@@ -6,7 +7,6 @@
   import Loader from 'src/components/Loader.svelte';
   import Nav from 'src/components/Nav.svelte';
   import { formatCurrency } from 'src/helpers/common';
-  import { store } from 'src/store';
   import { onMount } from 'svelte';
 
   let loading = true;

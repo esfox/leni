@@ -1,6 +1,6 @@
+import type { NewTransaction } from '$lib/interfaces';
 import { TRANSACTION_LIST_LIMIT } from 'src/constants/common';
 import { TransactionsFields } from 'src/constants/database';
-import type { NewTransaction } from 'src/interfaces';
 import { DatabaseService } from 'src/services/DatabaseService';
 
 export class TransactionService

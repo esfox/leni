@@ -1,8 +1,8 @@
 <script lang="ts">
   import Button from 'src/components/Button.svelte';
   import Overlay from 'src/components/Overlay.svelte';
-  import type { Transaction } from 'src/interfaces';
-  import { store } from 'src/store';
+  import type { Transaction } from '$lib/interfaces';
+  import { store } from '$lib/store';
   import Input from '../Input.svelte';
   import Loader from '../Loader.svelte';
 

@@ -1,5 +1,5 @@
+import type { NewTransaction } from '$lib/interfaces';
 import type { RequestHandler } from '@sveltejs/kit';
-import type { NewTransaction } from 'src/interfaces';
 import { TransactionService } from 'src/services/TransactionService';
 
 export const post: RequestHandler = async ({ request }) =>

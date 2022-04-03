@@ -1,6 +1,6 @@
+import type { NewTransaction, Transaction } from '$lib/interfaces';
 import ky from 'ky';
 import { TRANSACTION_LIST_LIMIT } from 'src/constants/common';
-import type { NewTransaction, Transaction } from 'src/interfaces';
 
 const api = ky.create({ prefixUrl: '/api' });
 const transactions = ky.create({ prefixUrl: '/api/transactions' });

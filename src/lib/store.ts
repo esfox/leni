@@ -1,6 +1,6 @@
 import { API } from '$lib/api';
+import { TRANSACTION_LIST_LIMIT } from 'src/constants/common';
 import { writable } from 'svelte/store';
-import { TRANSACTION_LIST_LIMIT } from './constants/common';
 import type { NewTransaction, StoreState } from './interfaces';
 
 function createStore()

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { store } from 'src/store';
+  import { store } from '$lib/store';
   import TransactionListItem from './TransactionListItem.svelte';
 
   $: transactions = $store.transactions;
