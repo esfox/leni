@@ -11,9 +11,9 @@
   export let shown = false;
   export let onSave: SaveHandler = () => {};
 
-  let title: string;
+  let title: string | undefined;
   let amount: number | undefined;
-  let notes: string;
+  let notes: string | undefined;
 
   let loading: boolean;
 
@@ -29,9 +29,9 @@
       });
 
       shown = false;
-      title = '';
+      title = undefined;
       amount = undefined;
-      notes = '';
+      notes = undefined;
       onSave(transaction);
     } catch (error) {
       console.error(error);
