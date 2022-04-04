@@ -10,7 +10,7 @@
   };
 </script>
 
-<nav class="sticky flex justify-between top-0 bg-green-600 text-white px-4 py-3">
+<nav class="sticky flex justify-between top-0 bg-green-600 text-white px-4 py-3 z-50">
   <h1 class="text-2xl font-bold">Leni</h1>
   <button on:click={logout}>Logout</button>
 </nav>
