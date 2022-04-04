@@ -1,18 +1,33 @@
 <script lang="ts">
+  import { onDestroy } from 'svelte';
+
   export let shown = false;
+  export let persistent = false;
   export let withCloseButton = false;
 
   export const show = () => (shown = true);
   export const hide = () => (shown = false);
   export const toggle = () => (shown = !shown);
 
+  const handleBackdropClick = () => {
+    if (persistent) return;
+    hide();
+  };
+
+  const handlePressEscape = ({ key }: KeyboardEvent) => {
+    if (persistent) return;
+    if (key === 'Escape') hide();
+  };
+
   $: {
     if (shown) {
-      document.addEventListener('keydown', ({ key }) => {
-        if (key === 'Escape') hide();
-      });
+      document.addEventListener('keydown', handlePressEscape);
+    } else {
+      document.removeEventListener('keydown', handlePressEscape);
     }
   }
+
+  onDestroy(() => document.removeEventListener('keydown', handlePressEscape));
 </script>
 
 {#if shown}
@@ -39,8 +54,7 @@
       <div
         class="fixed inset-0 bg-black bg-opacity-50 transition-opacity"
         aria-hidden="true"
-        role="button"
-        on:click={hide}
+        on:click={handleBackdropClick}
       />
 
       <!--

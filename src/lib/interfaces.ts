@@ -6,10 +6,11 @@ export interface StoreState
 
 export interface Transaction
 {
+  id: number;
   title: string;
   amount: number;
   notes?: string;
   date: string;
 };
 
-export type NewTransaction = Omit<Transaction, 'date'>;
+export type NewTransaction = Omit<Transaction, 'id' | 'date'>;

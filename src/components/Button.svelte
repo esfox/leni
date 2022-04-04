@@ -11,22 +11,39 @@
   export let rounded = false;
   export let disabled = false;
   export let noPadding = false;
+
+  type ButtonVariants = 'primary' | 'secondary' | 'danger';
+  export let variant: ButtonVariants = 'primary';
 </script>
 
 <button
   class={classNames(
     'font-bold text-white overflow-hidden',
-    'disabled:(bg-green-600 opacity-75 cursor-not-allowed transition)',
-    'focus:(outline-none ring-3 ring-green-300)',
+    'disabled:(opacity-75 cursor-not-allowed transition)',
+    'focus:(outline-none ring-3)',
+
     !noPadding && 'px-4 py-2',
-    basic && 'bg-green-600 hover:bg-green-700',
-    (text || icon) && 'focus:ring-0 bg-transparent hover:bg-green-700',
-    icon && 'rounded-full',
+
+    basic && variant === 'primary' && 'bg-green-600 hover:bg-green-700 focus:ring-green-300',
+
+    basic &&
+      variant === 'secondary' &&
+      'bg-gray-100 text-black hover:bg-gray-200 focus:ring-gray-200',
+
+    basic && variant === 'danger' && 'bg-red-500 hover:bg-red-600 focus:ring-red-200',
+
+    (text || icon) && 'focus:ring-0 bg-transparent hover:bg-gray-100',
+
+    icon && 'rounded-full px-4',
+
     outlined &&
       'bg-transparent text-green-600 border-2 border-green-600 hover:(bg-green-700 text-white)',
+
     rounded && 'rounded-lg',
+
     fab &&
       'fab bg-green-600 hover:bg-green-700 w-16 h-16 grid place-items-center rounded-full text-5xl shadow-xl',
+
     $$props.class
   )}
   {disabled}

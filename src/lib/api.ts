@@ -40,4 +40,9 @@ export class API
       json: transaction
     }).json();
   }
+
+  static deleteTransaction(transactionId: number): Promise<Transaction>
+  {
+    return api.delete(`transactions/delete/${transactionId}`).json();
+  }
 }

@@ -34,4 +34,15 @@ export class TransactionService
 
     return record;
   }
+
+  static async del(userId: string, transactionId: number)
+  {
+    const [record] = await TransactionService
+      .whereUserId(userId)
+      .and.where({ [TransactionsFields.id]: transactionId })
+      .del()
+      .returning('*');
+
+    return record;
+  }
 }

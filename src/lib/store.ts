@@ -33,7 +33,7 @@ function createStore()
     const newTransaction = await API.addTransaction(transaction);
     store.update((store) =>
     {
-      store.balance = store.balance + newTransaction.amount;
+      store.balance += newTransaction.amount;
       store.transactions.unshift(newTransaction);
 
       if(store.transactions.length > TRANSACTION_LIST_LIMIT)
@@ -45,11 +45,36 @@ function createStore()
     return newTransaction;
   };
 
+  const deleteTransaction = async (transactionId: number) =>
+  {
+    const deletedTransaction = await API.deleteTransaction(transactionId);
+    store.update((store) =>
+    {
+      const { transactions } = store;
+      for(const i in transactions)
+      {
+        const transaction = transactions[i];
+        if(transaction.id === deletedTransaction.id)
+        {
+          transactions.splice(Number(i), 1);
+          break;
+        }
+      }
+
+      store.balance -= deletedTransaction.amount;
+      store.transactions = transactions;
+      return store;
+    });
+
+    return deletedTransaction;
+  };
+
   return {
     subscribe: store.subscribe,
     fetchBalance,
     fetchTransactions,
     addTransaction,
+    deleteTransaction,
   };
 };
 
