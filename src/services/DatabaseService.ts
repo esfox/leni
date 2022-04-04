@@ -7,7 +7,6 @@ pg.types.setTypeParser(pg.types.builtins.FLOAT8, (value: string) => Number(value
 pg.types.setTypeParser(pg.types.builtins.NUMERIC, (value: string) => Number(value));
 
 export const database = knex({
-  dialect: 'postgres',
   client: 'pg',
   connection: env.DATABASE_CONNECTION_STRING,
 });
