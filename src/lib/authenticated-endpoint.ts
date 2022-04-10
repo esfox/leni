@@ -23,8 +23,11 @@ export const authenticated = async (
   }
   catch(error)
   {
+    if(error instanceof jwt.TokenExpiredError)
+      return { status: 401 };
+
     console.error(error);
-    return { status: 401 };
+    return { status: 500 };
   }
 
   return handler(event);

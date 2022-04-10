@@ -2,9 +2,11 @@ import type { NewTransaction, Transaction } from '$lib/interfaces';
 import ky from 'ky';
 import { TRANSACTION_LIST_LIMIT } from 'src/constants/common';
 import { AuthService } from 'src/services/AuthService';
+import { Router } from './router';
 
 const api = ky.create({
   prefixUrl: '/api',
+  timeout: 60000,
   hooks: {
     beforeRequest: [
       (request) =>
@@ -14,6 +16,20 @@ const api = ky.create({
           request.headers.set('authorization', accessToken);
       },
     ],
+    afterResponse: [
+      async (request, options, response) =>
+      {
+        if(response.status !== 401)
+          return response;
+
+        const session = await AuthService.refreshAccessToken();
+        if(!session)
+          return Router.toLogin();
+
+        request.headers.set('authorization', session.access_token);
+        return ky(request);
+      }
+    ]
   }
 });
 
@@ -37,7 +53,7 @@ export class API
   static addTransaction(transaction: NewTransaction): Promise<Transaction>
   {
     return api.post('transactions/create', {
-      json: transaction
+      json: transaction,
     }).json();
   }
 

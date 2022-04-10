@@ -1,12 +1,12 @@
 <script>
-  import { goto } from '$app/navigation';
+  import { Router } from '$lib/router';
   import { AuthService } from 'src/services/AuthService';
   import 'virtual:windi.css';
   import '../styles/app.scss';
 
   const logout = async () => {
     await AuthService.logout();
-    goto('/login');
+    Router.toLogin();
   };
 </script>
 

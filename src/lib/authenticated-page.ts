@@ -6,9 +6,10 @@ export function auth()
 {
   const isAuthenticated = writable(false);
 
-  onMount(() =>
+  onMount(async () =>
   {
-    isAuthenticated.set(!!AuthService.getUser());
+    const authenticated = AuthService.getAccessToken() || await AuthService.refreshAccessToken();
+    isAuthenticated.set(!!authenticated);
   });
 
   return {

@@ -36,6 +36,7 @@
       });
 
       shown = false;
+      type = TransactionType.Expense;
       title = undefined;
       amount = undefined;
       notes = undefined;
