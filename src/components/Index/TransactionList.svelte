@@ -29,32 +29,20 @@
   };
 </script>
 
-<table class="w-full">
-  <thead>
-    <tr>
-      <th class="text-left font-normal"><small>Amount</small></th>
-      <th class="text-left font-normal"><small>Title</small></th>
-      <th class="text-left font-normal"><small>Date</small></th>
-      <th />
-    </tr>
-  </thead>
-  <tbody>
-    {#each transactions as transaction}
-      <TransactionListItem
-        amount={transaction.amount}
-        title={transaction.title}
-        date={transaction.date}
-        onDelete={() => promptDelete(transaction)}
-      />
-    {/each}
-  </tbody>
+{#each transactions as transaction}
+  <TransactionListItem
+    amount={transaction.amount}
+    title={transaction.title}
+    date={transaction.date}
+    onDelete={() => promptDelete(transaction)}
+  />
+{/each}
 
-  {#if transactionToDelete}
-    <ConfirmDeleteTransaction
-      bind:shown={showingConfirmDelete}
-      transactionTitle={transactionToDelete.title}
-      {loading}
-      onConfirm={confirmDelete}
-    />
-  {/if}
-</table>
+{#if transactionToDelete}
+  <ConfirmDeleteTransaction
+    bind:shown={showingConfirmDelete}
+    transactionTitle={transactionToDelete.title}
+    {loading}
+    onConfirm={confirmDelete}
+  />
+{/if}

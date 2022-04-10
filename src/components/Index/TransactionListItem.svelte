@@ -11,7 +11,7 @@
 
   let showingMenu = false;
 
-  $: amountString = formatCurrency(amount);
+  $: amountString = formatCurrency(Math.abs(amount));
   $: dateString = formatDate(date);
 
   const handleDelete = () => {
@@ -20,15 +20,34 @@
   };
 </script>
 
-<tr class="w-full items-center not-last:(border-b border-b-light)-900">
-  <td class={classNames('w-[10rem] p-4', amount > 0 ? 'text-green-600' : 'text-red-600')}>
+<div
+  class="
+    w-full grid
+    grid-cols-[max(10rem)_1fr_auto_max(2rem)]
+    grid-rows-[1fr]
+    <sm:(
+      grid-cols-[1fr_auto]
+      grid-rows-[1fr_1fr]
+    )
+    items-center
+    not-last:(border-b border-b-light)-900"
+>
+  <div
+    class={classNames(
+      'font-bold px-5 py-3 <sm:(text-xl) sm:(max-w-[10rem] px-4 py-4)',
+      amount > 0 ? 'text-green-600' : 'text-red-600'
+    )}
+  >
+    {amount < 0 ? '−' : ''}
     {amountString}
-  </td>
-  <td>{title}</td>
-  <td class="w-[10rem]">
+  </div>
+  <div class="<sm:(text-sm order-1 p-5 pt-0)">
+    {title}
+  </div>
+  <div class="<sm:(order-2 p-5 pt-0) sm:px-4">
     <small class="text-dark-50">{dateString}</small>
-  </td>
-  <td class="w-[1rem]">
+  </div>
+  <div class="<sm:(text-right px-4)">
     <Popup bind:shown={showingMenu}>
       <div slot="activator" let:click>
         <Button icon on:click={click}>
@@ -46,5 +65,5 @@
         </li>
       </ul>
     </Popup>
-  </td>
-</tr>
+  </div>
+</div>
