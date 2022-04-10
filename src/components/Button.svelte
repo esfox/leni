@@ -9,7 +9,6 @@
   export let icon = false;
   export let basic = !fab && !outlined && !text && !icon;
   export let rounded = false;
-  export let disabled = false;
   export let noPadding = false;
 
   type ButtonVariants = 'primary' | 'secondary' | 'danger';
@@ -20,11 +19,11 @@
   class={classNames(
     'font-bold text-white overflow-hidden',
     'disabled:(opacity-75 cursor-not-allowed transition)',
-    'focus:(outline-none ring-3)',
+    'focus:(outline-none ring-green-300 ring-3)',
 
     !noPadding && 'px-4 py-2',
 
-    basic && variant === 'primary' && 'bg-green-600 hover:bg-green-700 focus:ring-green-300',
+    basic && variant === 'primary' && 'bg-green-600 hover:bg-green-700',
 
     basic &&
       variant === 'secondary' &&
@@ -36,8 +35,11 @@
 
     icon && 'rounded-full px-4',
 
-    outlined &&
-      'bg-transparent text-green-600 border-2 border-green-600 hover:(bg-green-700 text-white)',
+    outlined && 'bg-transparent border-2 hover:text-white',
+
+    outlined && variant === 'primary' && 'text-green-600 border-green-600 hover:bg-green-600',
+
+    outlined && variant === 'danger' && 'text-red-500 border-red-500 hover:bg-red-500',
 
     rounded && 'rounded-lg',
 
@@ -46,7 +48,8 @@
 
     $$props.class
   )}
-  {disabled}
+  disabled={$$props.disabled}
+  type={$$props.type}
   style={`--width: ${width}; --height: ${height}`}
   on:click
 >

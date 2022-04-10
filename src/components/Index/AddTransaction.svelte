@@ -1,8 +1,9 @@
 <script lang="ts">
-  import Button from 'src/components/Button.svelte';
-  import Overlay from 'src/components/Overlay.svelte';
   import type { Transaction } from '$lib/interfaces';
   import { store } from '$lib/store';
+  import Button from 'src/components/Button.svelte';
+  import Overlay from 'src/components/Overlay.svelte';
+  import { TransactionType } from 'src/constants/common';
   import Input from '../Input.svelte';
   import Loader from '../Loader.svelte';
 
@@ -11,20 +12,26 @@
   export let shown = false;
   export let onSave: SaveHandler = () => {};
 
+  let type: TransactionType = TransactionType.Expense;
   let title: string | undefined;
   let amount: number | undefined;
   let notes: string | undefined;
-
   let loading: boolean;
+
+  const setType = (newType: TransactionType) => (type = newType);
 
   const hide = () => (shown = false);
 
   const save = async () => {
     loading = true;
+
     try {
+      let transactionAmount = Math.abs(amount);
+      if (type === TransactionType.Expense) transactionAmount = -amount;
+
       const transaction = await store.addTransaction({
         title,
-        amount,
+        amount: transactionAmount,
         notes
       });
 
@@ -38,11 +45,15 @@
     }
     loading = false;
   };
+
+  $: {
+    if (amount < 0) setType(TransactionType.Expense);
+  }
 </script>
 
 <Overlay bind:shown>
   <div class="relative w-100 bg-white shadow-xl rounded-md">
-    <div class="flex justify-between items-center p-4">
+    <div class="flex justify-between items-center px-5 pt-4">
       <h2 class="text-lg font-bold">Add New Transaction</h2>
       <!-- svelte-ignore a11y-positive-tabindex -->
       <button
@@ -53,7 +64,29 @@
         &times;
       </button>
     </div>
-    <form class="px-4 pt-2 pb-4 z-10" on:submit|preventDefault={save}>
+    <form class="p-5 z-10" on:submit|preventDefault={save}>
+      <div class="grid grid-cols-2 pb-4">
+        <Button
+          type="button"
+          class="rounded-l-lg border-r-0"
+          variant="primary"
+          basic
+          outlined={type === TransactionType.Expense}
+          on:click={() => setType(TransactionType.Income)}
+        >
+          Income
+        </Button>
+        <Button
+          type="button"
+          class="rounded-r-lg border-l-0"
+          variant="danger"
+          basic
+          outlined={type === TransactionType.Income}
+          on:click={() => setType(TransactionType.Expense)}
+        >
+          Expense
+        </Button>
+      </div>
       <Input bind:value={title} label="Title" type="text" placeholder="Bought a thing" />
       <Input
         bind:value={amount}

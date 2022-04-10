@@ -5,3 +5,9 @@ export enum LoginFormAction
   Login,
   Register,
 }
+
+export enum TransactionType
+{
+  Income,
+  Expense,
+}
