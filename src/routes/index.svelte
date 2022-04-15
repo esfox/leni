@@ -43,11 +43,10 @@
 
       <div class="sticky bottom-8 left-0 w-full my-8">
         <Button class="flex items-center rounded-full mx-auto" on:click={show}>
-          <span class="text-4xl mr-2.5">+</span>
+          <i class="fa-solid fa-plus fa-xl mr-2.5" />
           <span class="text-lg">Add Transaction</span>
         </Button>
       </div>
-
       <AddTransaction bind:shown={showingAddTransaction} />
     {/if}
   </main>
