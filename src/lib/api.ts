@@ -40,7 +40,10 @@ export class API
     return api.get('balance').json();
   }
 
-  static getTransactions(page = 1, limit = TRANSACTION_LIST_LIMIT): Promise<Transaction[]>
+  static getTransactions(page = 1, limit = TRANSACTION_LIST_LIMIT): Promise<{
+    total: number,
+    transactions: Transaction[],
+  }>
   {
     return api.get('transactions', {
       searchParams: {

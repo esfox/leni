@@ -6,48 +6,76 @@
   import TransactionList from 'src/components/Index/TransactionList.svelte';
   import Loader from 'src/components/Loader.svelte';
   import Nav from 'src/components/Nav.svelte';
+  import Pagination from 'src/components/Pagination.svelte';
+  import { TRANSACTION_LIST_LIMIT } from 'src/constants/common';
   import { formatCurrency } from 'src/helpers/common';
 
   let isLoggedIn = auth();
+  isLoggedIn.subscribe((isLoggedIn) => {
+    if (!isLoggedIn) return;
+    loadData();
+  });
 
   let loading = true;
   let showingAddTransaction = false;
+  let transactionsListPage = 1;
 
   $: balanceString = formatCurrency($store.balance);
+  $: transactions = $store.transactions;
+  $: transactionsCount = $store.transactionsCount;
 
   const show = () => (showingAddTransaction = true);
-  isLoggedIn.subscribe(async (isLoggedIn) => {
-    if (!isLoggedIn) return;
+
+  const loadData = async (transactionsOnly?: boolean) => {
     loading = true;
     try {
-      await Promise.all([store.fetchBalance(), store.fetchTransactions()]);
+      if (transactionsOnly) {
+        await store.fetchTransactions(transactionsListPage);
+      } else {
+        await Promise.all([store.fetchBalance(), store.fetchTransactions(transactionsListPage)]);
+      }
     } catch (error) {
       console.error(error);
     }
     loading = false;
-  });
+  };
+
+  const changeTransactionsListPage = (page: number) => {
+    transactionsListPage = page;
+    loadData(true);
+  };
 </script>
 
 {#if $isLoggedIn}
   <Nav />
   <main class="max-w-[50rem] mx-auto">
+    <div class="text-center px-6 py-8">
+      <small>Balance</small>
+      <h1 class="text-4xl font-bold">{balanceString}</h1>
+    </div>
+
     {#if loading}
       <Loader class="mt-12 mx-auto" />
     {:else}
-      <div class="text-center px-6 py-8">
-        <small>Balance</small>
-        <h1 class="text-4xl font-bold">{balanceString}</h1>
-      </div>
-
-      <TransactionList />
-
-      <div class="sticky bottom-8 left-0 w-full my-8">
-        <Button class="flex items-center rounded-full mx-auto" on:click={show}>
-          <i class="fa-solid fa-plus fa-xl mr-2.5" />
-          <span class="text-lg">Add Transaction</span>
-        </Button>
-      </div>
-      <AddTransaction bind:shown={showingAddTransaction} />
+      <TransactionList {transactions} />
     {/if}
+
+    {#if transactions.length > 0}
+      <Pagination
+        class="flex justify-center py-8"
+        currentPage={transactionsListPage}
+        totalItems={transactionsCount}
+        itemsPerPage={TRANSACTION_LIST_LIMIT}
+        onChangePage={changeTransactionsListPage}
+      />
+    {/if}
+
+    <div class="sticky bottom-8 left-0 w-full pt-16">
+      <Button class="flex items-center rounded-full mx-auto" on:click={show}>
+        <i class="fa-solid fa-plus fa-xl mr-2.5" />
+        <span class="text-lg">Add Transaction</span>
+      </Button>
+    </div>
+    <AddTransaction bind:shown={showingAddTransaction} onSave={() => loadData(true)} />
   </main>
 {/if}

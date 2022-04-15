@@ -1,5 +1,5 @@
 import { env } from '$lib/env';
-import pkg from 'knex';
+import pkg, { Knex } from 'knex';
 import pg from 'pg';
 
 pg.types.setTypeParser(pg.types.builtins.INT8, (value: string) => Number(value));
@@ -9,7 +9,7 @@ pg.types.setTypeParser(pg.types.builtins.NUMERIC, (value: string) => Number(valu
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-ignore
 const { knex } = pkg;
-export const database = knex({
+export const database: Knex = knex({
   client: 'pg',
   connection: env.DATABASE_CONNECTION_STRING,
 });

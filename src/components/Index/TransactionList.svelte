@@ -1,15 +1,14 @@
 <script lang="ts">
   import type { Transaction } from '$lib/interfaces';
-
   import { store } from '$lib/store';
   import ConfirmDeleteTransaction from './ConfirmDeleteTransaction.svelte';
   import TransactionListItem from './TransactionListItem.svelte';
 
+  export let transactions = [];
+
   let loading = false;
   let showingConfirmDelete = false;
   let transactionToDelete: Transaction;
-
-  $: transactions = $store.transactions;
 
   const promptDelete = (transaction: Transaction) => {
     transactionToDelete = transaction;
@@ -20,7 +19,6 @@
     loading = true;
     try {
       await store.deleteTransaction(transactionToDelete.id);
-      // TODO: Show prompt
     } catch (error) {
       console.error(error);
     }

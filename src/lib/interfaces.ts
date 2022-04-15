@@ -2,6 +2,7 @@ export interface StoreState
 {
   balance: number;
   transactions: Transaction[];
+  transactionsCount: number;
 }
 
 export interface Transaction

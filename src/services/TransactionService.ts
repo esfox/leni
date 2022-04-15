@@ -11,11 +11,22 @@ export class TransactionService
       .where({ [TransactionsFields.userId]: userId });
   }
 
+  static async count(userId: string)
+  {
+    const [{ count }] = await TransactionService
+      .whereUserId(userId)
+      .count(TransactionsFields.id);
+
+    return count;
+  }
+
   static async list(userId: string, page = 1, limit = TRANSACTION_LIST_LIMIT)
   {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
     const records = await TransactionService
       .whereUserId(userId)
-      .offset(page - 1)
+      .offset((page - 1) * limit)
       .limit(limit)
       .orderBy(TransactionsFields.date, 'desc');
 
