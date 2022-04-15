@@ -26,25 +26,25 @@
     grid-cols-[max(10rem)_1fr_auto_max(2rem)]
     grid-rows-[1fr]
     <sm:(
-      grid-cols-[1fr_auto]
-      grid-rows-[1fr_1fr]
+      grid-cols-[auto_1fr]
+      grid-rows-[1fr_auto_auto]
     )
     items-center
     not-last:(border-b border-b-light)-900"
 >
   <div
     class={classNames(
-      'font-bold px-5 py-3 <sm:(text-xl) sm:(max-w-[10rem] px-4 py-4)',
+      'font-bold px-5 pt-5 pb-3 <sm:(text-xl) sm:(max-w-[10rem] px-4 py-4)',
       amount > 0 ? 'text-green-600' : 'text-red-600'
     )}
   >
     {amount < 0 ? '−' : ''}
     {amountString}
   </div>
-  <div class="<sm:(text-sm order-1 p-5 pt-0)">
+  <div class="<sm:(col-span-2 text-sm order-1 px-5 pt-1 pb-2)">
     {title}
   </div>
-  <div class="<sm:(order-2 p-5 pt-0) sm:px-4">
+  <div class="<sm:(col-span-2 order-2 text-right p-5 pt-0) sm:px-4">
     <small class="text-dark-50">{dateString}</small>
   </div>
   <div class="<sm:(text-right px-4)">
