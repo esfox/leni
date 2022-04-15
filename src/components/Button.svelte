@@ -7,7 +7,7 @@
   export let outlined = false;
   export let text = false;
   export let icon = false;
-  export let basic = !fab && !outlined && !text && !icon;
+  export let basic = true;
   export let rounded = false;
   export let noPadding = false;
 
@@ -31,7 +31,7 @@
 
     basic && variant === 'danger' && 'bg-red-500 hover:bg-red-600 focus:ring-red-200',
 
-    (text || icon) && 'focus:ring-0 bg-transparent hover:bg-gray-100',
+    (text || icon) && 'text-[unset] focus:ring-0 bg-transparent hover:bg-gray-100',
 
     icon && 'rounded-full px-4',
 

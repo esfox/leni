@@ -71,7 +71,6 @@
           type="button"
           class="rounded-l-lg border-r-0"
           variant="primary"
-          basic
           outlined={type === TransactionType.Expense}
           on:click={() => setType(TransactionType.Income)}
         >
@@ -81,7 +80,6 @@
           type="button"
           class="rounded-r-lg border-l-0"
           variant="danger"
-          basic
           outlined={type === TransactionType.Income}
           on:click={() => setType(TransactionType.Expense)}
         >
