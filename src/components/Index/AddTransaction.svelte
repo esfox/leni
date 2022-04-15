@@ -27,7 +27,7 @@
 
     try {
       let transactionAmount = Math.abs(amount);
-      if (type === TransactionType.Expense) transactionAmount = -amount;
+      if (type === TransactionType.Expense) transactionAmount = -transactionAmount;
 
       const transaction = await store.addTransaction({
         title,
