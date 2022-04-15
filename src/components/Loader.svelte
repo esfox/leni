@@ -5,8 +5,8 @@
 
   export let width = '4rem';
   export let height = '4rem';
-  export let thickness = '4px';
-  export let color = 'black';
+  export let thickness = '5px';
+  export let color = '#059669';
   export let duration = '2s';
 
   let className: string = '';
