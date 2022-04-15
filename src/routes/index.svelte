@@ -1,3 +1,15 @@
+<script lang="ts" context="module">
+  import type { Load } from '@sveltejs/kit';
+  export const load: Load = ({ url }) => {
+    const page = url.searchParams.get('page');
+    return {
+      props: {
+        transactionsListPage: page ? Number(page) : 1
+      }
+    };
+  };
+</script>
+
 <script lang="ts">
   import { auth } from '$lib/authenticated-page';
   import { store } from '$lib/store';
@@ -8,7 +20,9 @@
   import Nav from 'src/components/Nav.svelte';
   import Pagination from 'src/components/Pagination.svelte';
   import { TRANSACTION_LIST_LIMIT } from 'src/constants/common';
-  import { formatCurrency } from 'src/helpers/common';
+  import { formatCurrency, setPageSearchParam } from 'src/helpers/common';
+
+  export let transactionsListPage = 1;
 
   let isLoggedIn = auth();
   isLoggedIn.subscribe((isLoggedIn) => {
@@ -18,11 +32,12 @@
 
   let loading = true;
   let showingAddTransaction = false;
-  let transactionsListPage = 1;
 
   $: balanceString = formatCurrency($store.balance);
   $: transactions = $store.transactions;
   $: transactionsCount = $store.transactionsCount;
+
+  $: transactionsListPage && loadData();
 
   const show = () => (showingAddTransaction = true);
 
@@ -43,6 +58,7 @@
   const changeTransactionsListPage = (page: number) => {
     transactionsListPage = page;
     loadData(true);
+    setPageSearchParam(transactionsListPage);
   };
 </script>
 
@@ -76,6 +92,6 @@
         <span class="text-lg">Add Transaction</span>
       </Button>
     </div>
-    <AddTransaction bind:shown={showingAddTransaction} onSave={() => loadData(true)} />
+    <AddTransaction bind:shown={showingAddTransaction} onSave={() => loadData()} />
   </main>
 {/if}
