@@ -6,6 +6,7 @@
   import { TransactionType } from 'src/constants/common';
   import Input from '../Input.svelte';
   import Loader from '../Loader.svelte';
+  import Modal from '../Modal.svelte';
 
   type SaveHandler = (transaction: Transaction) => void;
 
@@ -53,19 +54,8 @@
 </script>
 
 <Overlay bind:shown>
-  <div class="relative w-100 bg-white shadow-xl rounded-md">
-    <div class="flex justify-between items-center px-5 pt-4">
-      <h2 class="text-lg font-bold">Add New Transaction</h2>
-      <!-- svelte-ignore a11y-positive-tabindex -->
-      <button
-        class="w-8 h-8 flex justify-center items-center text-3xl hover:bg-gray-100 rounded-full"
-        on:click={hide}
-        tabindex="1"
-      >
-        &times;
-      </button>
-    </div>
-    <form class="p-5 z-10" on:submit|preventDefault={save}>
+  <Modal title="Add New Transaction" onClose={hide}>
+    <form class="px-5 pb-5 z-10" on:submit|preventDefault={save}>
       <div class="grid grid-cols-2 pb-4">
         <Button
           type="button"
@@ -115,5 +105,5 @@
         </Button>
       </div>
     </form>
-  </div>
+  </Modal>
 </Overlay>

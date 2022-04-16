@@ -2,6 +2,7 @@
   import Overlay from 'src/components/Overlay.svelte';
   import Button from '../Button.svelte';
   import Loader from '../Loader.svelte';
+  import Modal from '../Modal.svelte';
 
   export let shown = false;
   export let loading = false;
@@ -12,20 +13,7 @@
 </script>
 
 <Overlay bind:shown persistent>
-  <div class="relative w-100 bg-white shadow-xl rounded-md">
-    <div class="flex justify-between items-center p-4">
-      <h2 class="text-lg font-bold">Confirm Delete Transaction</h2>
-      {#if !loading}
-        <!-- svelte-ignore a11y-positive-tabindex -->
-        <button
-          class="w-8 h-8 flex justify-center items-center text-3xl hover:bg-gray-100 rounded-full"
-          on:click={hide}
-          tabindex="1"
-        >
-          &times;
-        </button>
-      {/if}
-    </div>
+  <Modal title="Confirm Delete Transaction" onClose={hide}>
     <div class="px-4 mt-1">
       Are you sure you want to delete {transactionTitle
         ? `the transaction "${transactionTitle}"`
@@ -45,5 +33,5 @@
         {/if}
       </Button>
     </div>
-  </div>
+  </Modal>
 </Overlay>
