@@ -8,6 +8,7 @@
   export { className as class };
 
   const inputProps = { ...$$props };
+  delete inputProps.value;
   delete inputProps.class;
 </script>
 

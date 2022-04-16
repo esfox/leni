@@ -46,6 +46,17 @@ export class TransactionService
     return record;
   }
 
+  static async edit(userId: string, transactionId: number, newTransaction: NewTransaction)
+  {
+    const [record] = await TransactionService
+      .whereUserId(userId)
+      .update(newTransaction)
+      .where({ [TransactionsFields.id]: transactionId })
+      .returning('*');
+
+    return record;
+  }
+
   static async del(userId: string, transactionId: number)
   {
     const [record] = await TransactionService

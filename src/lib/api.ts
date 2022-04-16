@@ -60,8 +60,15 @@ export class API
     }).json();
   }
 
+  static editTransaction(transactionId: number, newTransaction: NewTransaction): Promise<Transaction>
+  {
+    return api.put(`transactions/${transactionId}`, {
+      json: newTransaction
+    }).json();
+  }
+
   static deleteTransaction(transactionId: number): Promise<Transaction>
   {
-    return api.delete(`transactions/delete/${transactionId}`).json();
+    return api.delete(`transactions/${transactionId}`).json();
   }
 }

@@ -14,7 +14,7 @@
   import { auth } from '$lib/authenticated-page';
   import { store } from '$lib/store';
   import Button from 'src/components/Button.svelte';
-  import AddTransaction from 'src/components/Index/AddTransaction.svelte';
+  import TransactionForm from 'src/components/Index/TransactionForm.svelte';
   import TransactionList from 'src/components/Index/TransactionList.svelte';
   import Loader from 'src/components/Loader.svelte';
   import Nav from 'src/components/Nav.svelte';
@@ -92,6 +92,6 @@
         <span class="text-lg">Add Transaction</span>
       </Button>
     </div>
-    <AddTransaction bind:shown={showingAddTransaction} onSave={() => loadData()} />
+    <TransactionForm bind:shown={showingAddTransaction} onSave={() => loadData()} />
   </main>
 {/if}

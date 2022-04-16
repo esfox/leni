@@ -9,20 +9,26 @@
   export let date = '';
   export let notes = '';
   export let onDelete = () => {};
+  export let onEdit = () => {};
 
   let showingMenu = false;
   let showingNotes = false;
 
   $: dateString = formatDate(date);
 
-  const doDelete = () => {
-    showingMenu = false;
-    onDelete();
-  };
-
   const toggleNotes = () => {
     showingMenu = false;
     showingNotes = !showingNotes;
+  };
+
+  const edit = () => {
+    showingMenu = false;
+    onEdit();
+  };
+
+  const doDelete = () => {
+    showingMenu = false;
+    onDelete();
   };
 </script>
 
@@ -55,10 +61,14 @@
       <ul class="min-w-10rem bg-white shadow-md">
         {#if !!notes}
           <li role="button" class="flex items-center p-3 hover:bg-gray-50" on:click={toggleNotes}>
-            <i class="fa-solid fa-pencil mr-3" />
+            <i class="fa-solid fa-note-sticky mr-3" />
             {showingNotes ? 'Hide' : 'View'} Notes
           </li>
         {/if}
+        <li role="button" class="flex items-center p-3 hover:bg-gray-50" on:click={edit}>
+          <i class="fa-solid fa-pencil mr-3" />
+          Edit
+        </li>
         <li
           role="button"
           class="flex items-center text-red-500 p-3 hover:bg-gray-50"

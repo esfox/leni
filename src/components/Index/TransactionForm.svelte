@@ -11,50 +11,68 @@
   type SaveHandler = (transaction: Transaction) => void;
 
   export let shown = false;
+  export let transaction: Transaction = undefined;
   export let onSave: SaveHandler = () => {};
 
   let type: TransactionType = TransactionType.Expense;
+
   let title: string | undefined;
   let amount: number | undefined;
   let notes: string | undefined;
   let loading: boolean;
 
-  const setType = (newType: TransactionType) => (type = newType);
+  $: {
+    if (amount < 0) setType(TransactionType.Expense);
+  }
+
+  $: transaction && setDefaultValues();
+  const setDefaultValues = () => {
+    title = transaction.title;
+    amount = transaction.amount;
+    notes = transaction.notes;
+    type = transaction.amount > 0 ? TransactionType.Income : TransactionType.Expense;
+  };
+
+  const setType = (newType: TransactionType) => {
+    type = newType;
+    if (amount && type === TransactionType.Income) amount = Math.abs(amount);
+  };
 
   const hide = () => (shown = false);
 
   const save = async () => {
-    loading = true;
+    if (!amount) return;
 
+    loading = true;
     try {
       let transactionAmount = Math.abs(amount);
       if (type === TransactionType.Expense) transactionAmount = -transactionAmount;
 
-      const transaction = await store.addTransaction({
-        title,
-        amount: transactionAmount,
-        notes
-      });
+      const savedTransaction = await store.saveTransaction(
+        {
+          id: transaction?.id,
+          title,
+          amount: transactionAmount,
+          notes
+        },
+        !!transaction
+      );
 
       shown = false;
       type = TransactionType.Expense;
       title = undefined;
       amount = undefined;
       notes = undefined;
-      onSave(transaction);
+      onSave(savedTransaction);
     } catch (error) {
       console.error(error);
     }
     loading = false;
   };
-
-  $: {
-    if (amount < 0) setType(TransactionType.Expense);
-  }
 </script>
 
 <Overlay bind:shown>
-  <Modal title="Add New Transaction" onClose={hide}>
+  <Modal title={`${!!transaction ? 'Edit' : 'Add New'} Transaction`} onClose={hide}>
     <form class="px-5 pb-5 z-10" on:submit|preventDefault={save}>
       <div class="grid grid-cols-2 pb-4">
         <Button

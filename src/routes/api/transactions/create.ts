@@ -7,8 +7,7 @@ export const post: RequestHandler = async (event) => authenticated(event, async 
 {
   try
   {
-    const body = await request.json();
-    const transaction = body as NewTransaction;
+    const transaction: NewTransaction = await request.json();
     const createdTransaction = await TransactionService.create(event.locals.userId, transaction);
     return { body: createdTransaction };
   }

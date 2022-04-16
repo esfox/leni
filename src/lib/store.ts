@@ -1,7 +1,7 @@
 import { API } from '$lib/api';
 import { TRANSACTION_LIST_LIMIT } from 'src/constants/common';
 import { writable } from 'svelte/store';
-import type { NewTransaction, StoreState } from './interfaces';
+import type { NewTransaction, StoreState, Transaction } from './interfaces';
 
 function createStore()
 {
@@ -27,7 +27,39 @@ function createStore()
     }));
   };
 
-  const addTransaction = async (transaction: NewTransaction) => API.addTransaction(transaction);
+  const saveTransaction = async (transaction: NewTransaction | Transaction, toEdit?: boolean) =>
+  {
+    if(!toEdit)
+      return API.addTransaction(transaction);
+
+    const updatedTransaction = await API.editTransaction(
+      (transaction as Transaction).id,
+      transaction,
+    );
+
+    store.update((store) =>
+    {
+      const { transactions, balance } = store;
+      let newBalance = balance;
+
+      for(const i in transactions)
+      {
+        const transaction = transactions[i];
+        if(transaction.id === updatedTransaction.id)
+        {
+          transactions[i] = updatedTransaction;
+          newBalance = newBalance - transaction.amount + updatedTransaction.amount;
+          break;
+        }
+      }
+
+      store.balance = newBalance;
+      store.transactions = transactions;
+      return store;
+    });
+
+    return updatedTransaction;
+  };
 
   const deleteTransaction = async (transactionId: number) =>
   {
@@ -57,7 +89,7 @@ function createStore()
     subscribe: store.subscribe,
     fetchBalance,
     fetchTransactions,
-    addTransaction,
+    saveTransaction,
     deleteTransaction,
   };
 };
