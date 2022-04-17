@@ -13,7 +13,7 @@
 </script>
 
 <div class={className}>
-  <label for={id} class="block text-sm font-medium text-gray-700 mb-1 ml-1">{label}</label>
+  <label for={id} class="block text-sm font-medium text-dark-50 mb-1 ml-1">{label}</label>
   {#if textarea}
     <textarea
       bind:value

@@ -21,15 +21,11 @@
   import Pagination from 'src/components/Pagination.svelte';
   import { TRANSACTION_LIST_LIMIT } from 'src/constants/common';
   import { formatCurrency, setPageSearchParam } from 'src/helpers/common';
+  import { onMount } from 'svelte';
 
   export let transactionsListPage = 1;
 
   let isLoggedIn = auth();
-  isLoggedIn.subscribe((isLoggedIn) => {
-    if (!isLoggedIn) return;
-    loadData();
-  });
-
   let loading = true;
   let showingAddTransaction = false;
 
@@ -42,6 +38,8 @@
   const show = () => (showingAddTransaction = true);
 
   const loadData = async (transactionsOnly?: boolean) => {
+    if (!$isLoggedIn) return;
+
     loading = true;
     try {
       if (transactionsOnly) {
@@ -60,6 +58,11 @@
     loadData(true);
     setPageSearchParam(transactionsListPage);
   };
+
+  onMount(() => {
+    if (!$isLoggedIn) return;
+    loadData();
+  });
 </script>
 
 {#if $isLoggedIn}

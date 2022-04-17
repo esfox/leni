@@ -9,6 +9,9 @@ export function auth()
   onMount(async () =>
   {
     const authenticated = AuthService.getAccessToken() || await AuthService.refreshAccessToken();
+    if(!authenticated)
+      return AuthService.checkLogin(isLoggedIn => isAuthenticated.set(isLoggedIn));
+
     isAuthenticated.set(!!authenticated);
   });
 
